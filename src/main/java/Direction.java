@@ -4,9 +4,12 @@ public enum Direction {
     S(180), SSW(202.5), SW(225.0), SWW(247.5),
     W(270.0), WWN(292.5), WN(315.0), WNN(337.5);
 
-    public final double angle;
+    public final double sinAngle;
+    public final double cosAngle;
 
     private Direction(double angle){
-        this.angle = Math.toRadians(angle);
+        double rads = Math.toRadians(angle);
+        this.sinAngle = Math.sin(rads);
+        this.cosAngle = Math.cos(rads);
     }
 }
