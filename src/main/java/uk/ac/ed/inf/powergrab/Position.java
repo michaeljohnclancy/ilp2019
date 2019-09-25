@@ -1,6 +1,8 @@
 package uk.ac.ed.inf.powergrab;
 
 
+import static uk.ac.ed.inf.powergrab.App.*;
+
 public class Position {
 
     private static final double R = 0.0003;
@@ -15,28 +17,20 @@ public class Position {
     }
 
     public Position nextPosition(Direction direction){
-        double nextLatitude;
-        double nextLongitude;
+        return new Position(
+                this.latitude + getDistance(direction, true),
+                this.longitude + getDistance(direction, false));
+    }
 
-        if (direction.toString().indexOf('S') >= 0) {
-            nextLatitude = this.latitude - Math.abs(R * direction.sinAngle);
-        } else{
-            nextLatitude = this.latitude + Math.abs(R * direction.sinAngle);
-        }
-
-        if (direction.toString().indexOf('W') >= 0) {
-            nextLongitude = this.longitude - Math.abs(R * direction.cosAngle);
-        }else{
-            nextLongitude = this.longitude + Math.abs(R * direction.cosAngle);
-        }
-
-        System.out.println(String.format("Direction: %s; lat = %s; long = %s;", direction, nextLatitude, nextLongitude));
-
-        return new Position(nextLatitude, nextLongitude);
+    public double getDistance(Direction direction, boolean isLatitude){
+            return ((direction.
+                    toString().
+                    indexOf(isLatitude ? 'S' : 'W') >= 0) ? -1 : 1
+            ) * Math.abs(R * (isLatitude ? direction.sinAngle : direction.cosAngle));
     }
 
     public boolean inPlayArea() {
-        return ((this.latitude > 55.942617 && this.latitude < 55.946233) &&
-                (this.longitude < -3.184319 && this.longitude > -3.192473));
+        return playArea.contains(this.latitude, this.longitude);
+
     }
 }

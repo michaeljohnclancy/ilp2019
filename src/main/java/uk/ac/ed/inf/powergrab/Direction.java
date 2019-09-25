@@ -5,6 +5,7 @@ public enum Direction {
     S(90.0), SSW(112.5), SW(135.0), WSW(157.5),
     W(180.0), WNW(202.5), NW(225.0), NNW(247.5),
     N(270.0), NNE(292.5), NE(315.0), ENE(337.5);
+
     public final double sinAngle;
     public final double cosAngle;
 
