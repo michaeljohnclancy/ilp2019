@@ -1,9 +1,11 @@
+package uk.ac.ed.inf.powergrab;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for PowerGrab App.
+ * Unit test for PowerGrab uk.ac.ed.inf.powergrab.App.
  */
 public class AppTest extends TestCase {
 	/**
