@@ -18,15 +18,9 @@ public class Position {
 
     public Position nextPosition(Direction direction){
         return new Position(
-                this.latitude + getDistance(direction, true),
-                this.longitude + getDistance(direction, false));
-    }
-
-    public double getDistance(Direction direction, boolean isLatitude){
-            return ((direction.
-                    toString().
-                    indexOf(isLatitude ? 'S' : 'W') >= 0) ? -1 : 1
-            ) * Math.abs(R * (isLatitude ? direction.sinAngle : direction.cosAngle));
+                this.latitude - (R * direction.sinAngle),
+                this.longitude + (R * direction.cosAngle)
+        );
     }
 
     public boolean inPlayArea() {
