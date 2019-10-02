@@ -1,7 +1,6 @@
 package uk.ac.ed.inf.powergrab;
 
-
-import static uk.ac.ed.inf.powergrab.App.*;
+import static uk.ac.ed.inf.powergrab.App.playArea;
 
 public class Position {
 
@@ -18,13 +17,13 @@ public class Position {
 
     public Position nextPosition(Direction direction){
         return new Position(
-                this.latitude - (R * direction.sinAngle),
-                this.longitude + (R * direction.cosAngle)
+                latitude - (R * direction.sinAngle),
+                longitude + (R * direction.cosAngle)
         );
     }
 
     public boolean inPlayArea() {
-        return playArea.contains(this.latitude, this.longitude);
+        return playArea.contains(latitude, longitude);
 
     }
 }
