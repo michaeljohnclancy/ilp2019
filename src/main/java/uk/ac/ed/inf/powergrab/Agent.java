@@ -18,4 +18,36 @@ public class Agent {
         }
     }
 
+    public double getPower() {
+        return this.power;
+    }
+
+    public void setPower(double power){
+        this.power = power;
+    }
+
+    public Position getPosition(){
+        return this.position;
+    }
+
+    public void setPosition(Position position){
+        if (position.inPlayArea()){
+        this.position = position;
+    } else{
+            throw Exception("Cant change Position");
+
+        }
+
+    public
+
+
+}
+
+public static class IllegalPositionException extends Exception{
+        public IllegalPositionException(){
+            super(exception);
+
+        }
+
+}
 }
