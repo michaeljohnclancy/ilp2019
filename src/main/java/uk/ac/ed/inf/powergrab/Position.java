@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.powergrab;
 
-import static uk.ac.ed.inf.powergrab.Map.playArea;
+
+import static uk.ac.ed.inf.powergrab.StationCollection.playArea;
 
 public class Position {
 
