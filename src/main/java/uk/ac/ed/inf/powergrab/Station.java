@@ -11,21 +11,21 @@ import java.io.IOException;
 import static java.lang.Double.max;
 import static java.lang.Double.min;
 
-@JsonDeserialize(using = Station.StationDeserialiser.class)
+@JsonDeserialize(using = Station.StationDeserializer.class)
 public class Station {
 
     private final Position position;
     private double balance;
     private double power;
 
-    public Station(StationBuilder builder){
-        this.position = new Position(builder.latitude, builder.longitude);
+    private Station(StationBuilder builder){
+        this.position = builder.position;
         this.balance = builder.balance;
         this.power = builder.power;
     }
 
     public void transferBalance(Agent agent){
-        double newBalance =  balance - (255 - agent.getBalance());
+        double newBalance = balance - (255 - agent.getBalance());
         agent.setBalance(agent.getBalance()+balance);
         balance = newBalance;
 
@@ -34,45 +34,48 @@ public class Station {
         agent.setBalance(min(255.0, totalBalance));
     }
 
-    public static class StationBuilder{
+    private static class StationBuilder{
 
         private double latitude;
         private double longitude;
         private double balance;
         private double power;
 
-        public StationBuilder setLatitude(double latitude){
+        private Position position;
+
+        private StationBuilder setLatitude(double latitude){
             this.latitude = latitude;
             return this;
         }
 
-        public StationBuilder setLongitude(double longitude){
+        private StationBuilder setLongitude(double longitude){
             this.longitude = longitude;
             return this;
         }
 
-        public StationBuilder setBalance(double balance){
+        private StationBuilder setBalance(double balance){
             this.balance = balance;
             return this;
         }
 
-        public StationBuilder setPower(double power){
+        private StationBuilder setPower(double power){
             this.power = power;
             return this;
         }
 
-        public Station build(){
+        private Station build(){
+            this.position = new Position(latitude, longitude);
             return new Station(this);
         }
     }
 
-    public static class StationDeserialiser extends StdDeserializer<Station>{
+    public static class StationDeserializer extends StdDeserializer<Station>{
 
-        public StationDeserialiser(){
+        public StationDeserializer(){
             this(null);
         }
 
-        private StationDeserialiser(Class<?> vc) {
+        private StationDeserializer(Class<?> vc) {
             super(vc);
         }
 
