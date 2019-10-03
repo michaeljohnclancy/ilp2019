@@ -11,9 +11,9 @@ public class Agent {
     }
 
     public void setBalance(double balance) {
-        if (balance < 0){
+        if (balance < 0) {
             this.balance = 0;
-        } else{
+        } else {
             this.balance = balance;
         }
     }
@@ -22,32 +22,20 @@ public class Agent {
         return this.power;
     }
 
-    public void setPower(double power){
+    public void setPower(double power) {
         this.power = power;
     }
 
-    public Position getPosition(){
+    public Position getPosition() {
         return this.position;
     }
 
-    public void setPosition(Position position){
-        if (position.inPlayArea()){
-        this.position = position;
-    } else{
-            throw Exception("Cant change Position");
-
+    public void setPosition(Position position) throws Exception {
+        if (position.inPlayArea()) {
+            this.position = position;
+        } else {
+            throw new Exception("New position is not within the play area!");
         }
-
-    public
-
-
+    }
 }
 
-public static class IllegalPositionException extends Exception{
-        public IllegalPositionException(){
-            super(exception);
-
-        }
-
-}
-}

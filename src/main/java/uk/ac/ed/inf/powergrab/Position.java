@@ -1,6 +1,6 @@
 package uk.ac.ed.inf.powergrab;
 
-import static uk.ac.ed.inf.powergrab.App.playArea;
+import static uk.ac.ed.inf.powergrab.Map.playArea;
 
 public class Position {
 
@@ -8,7 +8,6 @@ public class Position {
 
     public double latitude;
     public double longitude;
-
 
     public Position(double latitude, double longitude){
         this.latitude = latitude;
