@@ -1,17 +1,17 @@
 package uk.ac.ed.inf.powergrab;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.DoubleNode;
 
 import java.io.IOException;
 
 import static java.lang.Double.max;
 import static java.lang.Double.min;
 
+@JsonDeserialize(using = Station.StationDeserialiser.class)
 public class Station {
 
     private final Position position;
