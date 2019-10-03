@@ -2,6 +2,8 @@ package uk.ac.ed.inf.powergrab;
 
 public class Agent {
 
+    static final double R = 0.0003;
+
     private double power;
     private double balance;
     private Position position;

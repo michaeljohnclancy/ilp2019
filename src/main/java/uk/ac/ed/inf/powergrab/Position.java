@@ -4,8 +4,6 @@ import static uk.ac.ed.inf.powergrab.Map.playArea;
 
 public class Position {
 
-    private static final double R = 0.0003;
-
     public double latitude;
     public double longitude;
 
@@ -16,8 +14,8 @@ public class Position {
 
     public Position nextPosition(Direction direction){
         return new Position(
-                latitude - (R * direction.sinAngle),
-                longitude + (R * direction.cosAngle)
+                latitude - (Agent.R * direction.sinAngle),
+                longitude + (Agent.R * direction.cosAngle)
         );
     }
 
