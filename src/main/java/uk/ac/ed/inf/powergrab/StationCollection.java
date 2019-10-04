@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.awt.geom.Rectangle2D;
@@ -15,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+@JsonDeserialize(using = StationCollection.StationCollectionDeserializer.class)
 public class StationCollection {
 
     private static final double LATMIN = 55.942617;
@@ -26,20 +28,26 @@ public class StationCollection {
 
     private List<Station> stationList;
 
-    public StationCollection(String filePath) throws IOException{
-        this(new File(filePath));
-    }
-
-    public StationCollection(File file) throws IOException {
-        this(new ObjectMapper().readValue(file, new TypeReference<List<Station>>(){}));
-    }
 
     public StationCollection(List<Station> stationList) {
         this.stationList = Collections.unmodifiableList(stationList);
     }
 
+    public static StationCollection fromFile(String filePath) throws IOException {
+        return fromFile(new File(filePath));
+    }
+
+    public static StationCollection fromFile(File file) throws IOException {
+        return new ObjectMapper().readValue(file, StationCollection.class);
+    }
+
     public List<Station> getStationList() {
         return this.stationList;
+    }
+
+    public Optional<Station> getNearestStation(Agent agent){
+        return stationList.stream().
+                min((station, x) -> new PositionComparator().compare(agent.getPosition(), station.getPosition()));
     }
 
     private static class PositionComparator implements Comparator<Position>{
@@ -51,12 +59,11 @@ public class StationCollection {
         }
     }
 
-    public Optional<Station> getNearestStation(Agent agent){
-        return stationList.stream().
-                min((station, x) -> new PositionComparator().compare(agent.getPosition(), station.getPosition()));
-    }
-
     public static class StationCollectionDeserializer extends StdDeserializer<StationCollection>{
+
+        public StationCollectionDeserializer(){
+            this(null);
+        }
 
         protected StationCollectionDeserializer(Class<?> vc) {
             super(vc);
