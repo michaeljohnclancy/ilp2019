@@ -7,7 +7,10 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 public class StationCollection {
 
@@ -34,5 +37,19 @@ public class StationCollection {
 
     public List<Station> getStationList() {
         return this.stationList;
+    }
+
+    private static class PositionComparator implements Comparator<Position>{
+        public int compare(final Position p1, final Position p2){
+            return (int) Math.sqrt(
+                    Math.pow(p2.latitude - p1.latitude, 2)
+                            + Math.pow(p2.longitude - p1.longitude, 2)
+            );
+        }
+    }
+
+    public Optional<Station> getNearestStation(Agent agent){
+        return stationList.stream().
+                min((station, x) -> new PositionComparator().compare(agent.getPosition(), station.getPosition()));
     }
 }
