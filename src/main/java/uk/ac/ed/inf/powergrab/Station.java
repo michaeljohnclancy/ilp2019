@@ -11,28 +11,10 @@ import java.io.IOException;
 import static java.lang.Double.max;
 
 @JsonDeserialize(using = Station.StationDeserializer.class)
-public class Station {
+public class Station extends Entity{
 
-    private final Position position;
-    private double balance;
-    private double power;
-
-    private Station(StationBuilder builder){
-        this.position = builder.position;
-        this.balance = builder.balance;
-        this.power = builder.power;
-    }
-
-    public Position getPosition(){
-        return position;
-    }
-
-    public double getPower(){
-        return power;
-    }
-
-    public double getBalance(){
-        return balance;
+    Station(StationBuilder builder) {
+        super(builder);
     }
 
     public void transferBalance(Agent agent){
@@ -47,37 +29,11 @@ public class Station {
         power -= (agent.getPower() - oldAgentPower);
     }
 
-    private static class StationBuilder{
+    public static final class StationBuilder extends Entity.GenericEntityBuilder<StationBuilder>{
 
-        private double latitude;
-        private double longitude;
-        private double balance;
-        private double power;
-
-        private Position position;
-
-        private StationBuilder setLatitude(double latitude){
-            this.latitude = latitude;
-            return this;
-        }
-
-        private StationBuilder setLongitude(double longitude){
-            this.longitude = longitude;
-            return this;
-        }
-
-        private StationBuilder setBalance(double balance){
-            this.balance = balance;
-            return this;
-        }
-
-        private StationBuilder setPower(double power){
-            this.power = power;
-            return this;
-        }
-
-        private Station build(){
-            this.position = new Position(latitude, longitude);
+        @Override
+        public Station build() {
+            position = new Position(latitude, longitude);
             return new Station(this);
         }
     }
