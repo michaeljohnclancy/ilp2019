@@ -29,11 +29,20 @@ public class Station extends Entity{
         power -= (agent.getPower() - oldAgentPower);
     }
 
+    @Override
+    public void setPower(double power) {
+        this.power = power;
+    }
+
+    @Override
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     public static final class StationBuilder extends Entity.GenericEntityBuilder<StationBuilder>{
 
         @Override
         public Station build() {
-            position = new Position(latitude, longitude);
             return new Station(this);
         }
     }
