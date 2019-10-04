@@ -24,4 +24,9 @@ public class Position {
         return playArea.contains(latitude, longitude);
 
     }
+
+    public boolean equals(Position position){
+        return position.latitude == latitude
+                && position.longitude == longitude;
+    }
 }

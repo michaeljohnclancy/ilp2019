@@ -1,7 +1,11 @@
 package uk.ac.ed.inf.powergrab;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -50,5 +54,24 @@ public class StationCollection {
     public Optional<Station> getNearestStation(Agent agent){
         return stationList.stream().
                 min((station, x) -> new PositionComparator().compare(agent.getPosition(), station.getPosition()));
+    }
+
+    public static class StationCollectionDeserializer extends StdDeserializer<StationCollection>{
+
+        protected StationCollectionDeserializer(Class<?> vc) {
+            super(vc);
+        }
+
+        @Override
+        public StationCollection deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException{
+            JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
+
+            return new StationCollection(
+                    new ObjectMapper().readValue(
+                            jsonNode.get("features").toString(), new TypeReference<List<Station>>(){}
+                            )
+            );
+
+        }
     }
 }
