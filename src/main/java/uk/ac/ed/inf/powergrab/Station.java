@@ -24,10 +24,28 @@ public class Station {
         this.power = builder.power;
     }
 
+    public Position getPosition(){
+        return position;
+    }
+
+    public double getPower(){
+        return power;
+    }
+
+    public double getBalance(){
+        return balance;
+    }
+
     public void transferBalance(Agent agent){
         double oldAgentBalance = agent.getBalance();
         agent.setBalance(max(0.0, agent.getBalance() + balance));
         balance -= (agent.getBalance() - oldAgentBalance);
+    }
+
+    public void transferPower(Agent agent){
+        double oldAgentPower = agent.getPower();
+        agent.setPower(max(0.0, agent.getPower() + power));
+        power -= (agent.getPower() - oldAgentPower);
     }
 
     private static class StationBuilder{
@@ -66,10 +84,6 @@ public class Station {
     }
 
     public static class StationDeserializer extends StdDeserializer<Station>{
-
-        public StationDeserializer(){
-            this(null);
-        }
 
         private StationDeserializer(Class<?> vc) {
             super(vc);
