@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
 
 import static java.lang.Double.max;
-import static java.lang.Double.min;
 
 @JsonDeserialize(using = Station.StationDeserializer.class)
 public class Station {
