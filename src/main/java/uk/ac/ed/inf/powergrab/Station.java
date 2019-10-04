@@ -25,13 +25,9 @@ public class Station {
     }
 
     public void transferBalance(Agent agent){
-        double newBalance = balance - (255 - agent.getBalance());
-        agent.setBalance(agent.getBalance()+balance);
-        balance = newBalance;
-
-        double totalBalance = balance + agent.getBalance();
-        balance = max(0, totalBalance - 255.0);
-        agent.setBalance(min(255.0, totalBalance));
+        double oldAgentBalance = agent.getBalance();
+        agent.setBalance(max(0.0, agent.getBalance() + balance));
+        balance -= (agent.getBalance() - oldAgentBalance);
     }
 
     private static class StationBuilder{
