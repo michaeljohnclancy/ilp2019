@@ -8,23 +8,19 @@ public class Agent extends Entity{
         super(builder);
     }
 
+    public void move(Direction direction){
+        position = position.nextPosition(direction);
+    }
+
+    @Override
     public void setBalance(double balance) {
-        if (balance < 0) {
-            this.balance = 0;
-        } else {
-            this.balance = balance;
+        if (balance < 0){
+            throw new IllegalArgumentException("Balance cannot be negative!");
         }
+        this.balance = balance;
     }
 
-    public void setPosition(Position position) throws Exception {
-        if (position.inPlayArea()) {
-            this.position = position;
-        } else {
-            throw new Exception("New position is not within the play area!");
-        }
-    }
-
-    public static class AgentBuilder extends Entity.GenericEntityBuilder<Station.StationBuilder>{
+    public static class AgentBuilder extends Entity.GenericEntityBuilder<AgentBuilder>{
 
         public Agent build(){
             this.position = new Position(latitude, longitude);

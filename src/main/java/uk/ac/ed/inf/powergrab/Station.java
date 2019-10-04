@@ -59,8 +59,7 @@ public class Station extends Entity{
             return new Station.StationBuilder()
                         .setBalance(coins)
                         .setPower(power)
-                        .setLatitude(latitude)
-                        .setLongitude(longitude)
+                        .setPosition(latitude, longitude)
                         .build();
         }
     }

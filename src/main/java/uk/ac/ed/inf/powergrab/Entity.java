@@ -12,11 +12,14 @@ public abstract class Entity {
         position = builder.position;
         balance = builder.balance;
         power = builder.power;
-
     }
 
     public Position getPosition(){
         return position;
+    }
+
+    public void setPower(double power) {
+        this.power = power;
     }
 
     public double getPower(){
@@ -24,16 +27,14 @@ public abstract class Entity {
     }
 
     public void setBalance(double power) {
-
+        this.power = power;
     }
 
     public double getBalance(){
         return balance;
     }
 
-    public void setPower(double power) {
 
-    }
 
     public abstract static class GenericEntityBuilder<T extends GenericEntityBuilder<T>> {
         double latitude;
@@ -43,13 +44,8 @@ public abstract class Entity {
 
         Position position;
 
-        public T setLatitude(double latitude){
-            this.latitude = latitude;
-            return self();
-        }
-
-        public T setLongitude(double longitude){
-            this.longitude = longitude;
+        public T setPosition(double latitude, double longitude){
+            this.position = new Position(latitude, longitude);
             return self();
         }
 
