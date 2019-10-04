@@ -18,12 +18,20 @@ public class Agent extends Entity{
             throw new IllegalArgumentException("Balance cannot be negative!");
         }
         this.balance = balance;
+
+    }
+
+    @Override
+    public void setPower(double power){
+        if (power < 0){
+            throw new IllegalArgumentException("Balance cannot be negative!");
+        }
+        this.power = power;
     }
 
     public static class AgentBuilder extends Entity.GenericEntityBuilder<AgentBuilder>{
 
         public Agent build(){
-            this.position = new Position(latitude, longitude);
             return new Agent(this);
         }
     }
