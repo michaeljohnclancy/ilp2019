@@ -12,9 +12,9 @@ import uk.ac.ed.inf.powergrab.Station;
 
 public class StationTest {
 
-    public static final double DOUBLEPRECISION = 10e-15;
+    private static final double DOUBLEPRECISION = 10e-15;
 
-    Station station;
+    private Station station;
 
     @Before
     public void makeObjects(){
@@ -39,7 +39,7 @@ public class StationTest {
     }
 
     @Test
-    public void ifjsonStationProvided_thenCorrectObjectIsCreated() throws JsonProcessingException {
+    public void ifJsonStationProvided_thenCorrectObjectIsCreated() throws JsonProcessingException {
 
         String stationJson = "{\"type\":\"Feature\",\n" +
                 "   \"properties\":{\n" +
@@ -64,7 +64,7 @@ public class StationTest {
 
     }
 
-    public void assertDoubleEquals(double d1, double d2){
+    private void assertDoubleEquals(double d1, double d2){
         assert Math.abs(d2-d1) < DOUBLEPRECISION;
     }
 }

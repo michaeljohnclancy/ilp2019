@@ -8,10 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -20,8 +18,21 @@ public class StationList {
 
     private List<Station> stationList;
 
-    public StationList(List<Station> stationList){
+    private StationList(List<Station> stationList){
         this.stationList = Collections.unmodifiableList(stationList);
+    }
+
+    public Station get(int i){
+        return stationList.get(i);
+    }
+
+    public int size(){
+        return stationList.size();
+    }
+
+    public Optional<Station> getNearestStation(Agent agent){
+        return stationList.stream().
+                min((station, x) -> new PositionComparator().compare(agent.getPosition(), station.getPosition()));
     }
 
     public static StationList fromUrl(String url) throws IOException {
@@ -38,11 +49,6 @@ public class StationList {
 
     public static StationList fromFile(File file) throws IOException {
         return new ObjectMapper().readValue(file, StationList.class);
-    }
-
-    public Optional<Station> getNearestStation(Agent agent){
-        return stationList.stream().
-                min((station, x) -> new PositionComparator().compare(agent.getPosition(), station.getPosition()));
     }
 
     private static class PositionComparator implements Comparator<Position>{
