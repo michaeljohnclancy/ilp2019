@@ -18,7 +18,6 @@ public class Agent extends Entity{
             throw new IllegalArgumentException("Balance cannot be negative!");
         }
         this.balance = balance;
-
     }
 
     @Override

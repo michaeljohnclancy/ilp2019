@@ -1,5 +1,7 @@
 package test.uk.ac.ed.inf.powergrab;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +19,8 @@ public class StationTest {
     @Before
     public void makeObjects(){
         station = new Station.StationBuilder()
-                                        .setPower(-74.62785781303182)
-                                        .setBalance(-123.76819100883893)
+                                        .setPower(40.763427231356744)
+                                        .setBalance(15.655206987957596)
                                         .setPosition(-3.190260653365977, 55.94587364601307)
                                         .build();
     }
@@ -27,8 +29,8 @@ public class StationTest {
     public void ifStationBuilderIsUsed_thenFieldsAreCorrectlyPopulated(){
 
         Position position = new Position(-3.190260653365977, 55.94587364601307);
-        double power = -74.62785781303182;
-        double balance = -123.76819100883893;
+        double power = 40.763427231356744;
+        double balance = 15.655206987957596;
 
 
         assert position.equals(station.getPosition());
@@ -36,12 +38,33 @@ public class StationTest {
         assertDoubleEquals(balance, station.getBalance());
     }
 
+    @Test
+    public void ifjsonStationProvided_thenCorrectObjectIsCreated() throws JsonProcessingException {
+
+        String stationJson = "{\"type\":\"Feature\",\n" +
+                "   \"properties\":{\n" +
+                "      \"id\":\"237d−16f8−57e5−67fc−2d3e−1ca1\",\n" +
+                "      \"coins\":\"15.655206987957596\",\n" +
+                "      \"power\":\"40.763427231356744\",\n" +
+                "      \"marker−symbol\":\"lighthouse\",\n" +
+                "      \"marker−color\":\"#003800\"\n" +
+                "   },\n" +
+                "   \"geometry\":{\n" +
+                "      \"type\":\"Point\",\n" +
+                "      \"coordinates\":[\n" +
+                "         -3.190260653365977,\n" +
+                "         55.94587364601307\n" +
+                "      ]\n" +
+                "   }\n" +
+                "}";
+
+        Station actualStation = new ObjectMapper().readValue(stationJson, Station.class);
+
+        assert station.equals(actualStation);
+
+    }
+
     public void assertDoubleEquals(double d1, double d2){
         assert Math.abs(d2-d1) < DOUBLEPRECISION;
     }
-
-
-
-
-
 }

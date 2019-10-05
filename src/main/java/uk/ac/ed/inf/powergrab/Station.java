@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.node.DoubleNode;
 
 import java.io.IOException;
 
@@ -49,6 +50,10 @@ public class Station extends Entity{
 
     public static class StationDeserializer extends StdDeserializer<Station>{
 
+        public StationDeserializer(){
+            this(null);
+        }
+
         private StationDeserializer(Class<?> vc) {
             super(vc);
         }
@@ -58,12 +63,12 @@ public class Station extends Entity{
             JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
 
             JsonNode properties = jsonNode.get("properties");
-            double coins = (double) properties.get("coins").numberValue();
-            double power = (double) properties.get("power").numberValue();
+            double coins = Double.parseDouble(properties.get("coins").textValue());
+            double power = Double.parseDouble(properties.get("power").textValue());
 
             JsonNode coordinates = jsonNode.get("geometry").get("coordinates");
-            double latitude = (double) coordinates.get("latitude").numberValue();
-            double longitude = (double) coordinates.get("longitude").numberValue();
+            double latitude = Double.parseDouble(coordinates.get(0).toString());
+            double longitude = Double.parseDouble(coordinates.get(1).toString());
 
             return new Station.StationBuilder()
                         .setBalance(coins)
