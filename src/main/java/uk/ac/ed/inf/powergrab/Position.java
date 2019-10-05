@@ -1,5 +1,8 @@
 package uk.ac.ed.inf.powergrab;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import static uk.ac.ed.inf.powergrab.PowerGrabMap.playArea;
 
 public class Position {
@@ -25,7 +28,16 @@ public class Position {
     }
 
     public boolean equals(Position position){
-        return position.latitude == latitude
-                && position.longitude == longitude;
+        return new EqualsBuilder()
+                .append(latitude, position.latitude)
+                .append(longitude, position.longitude)
+                .isEquals();
+    }
+
+    public int hashcode(){
+        return new HashCodeBuilder(17, 37)
+                .append(latitude)
+                .append(longitude)
+                .toHashCode();
     }
 }
