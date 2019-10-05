@@ -90,8 +90,8 @@ public class Station extends Entity{
             double power = Double.parseDouble(properties.get("power").textValue());
 
             JsonNode coordinates = jsonNode.get("geometry").get("coordinates");
-            double latitude = Double.parseDouble(coordinates.get(0).toString());
-            double longitude = Double.parseDouble(coordinates.get(1).toString());
+            double latitude = Double.parseDouble(coordinates.get(1).toString());
+            double longitude = Double.parseDouble(coordinates.get(0).toString());
 
             return new Station.StationBuilder()
                         .setBalance(coins)
