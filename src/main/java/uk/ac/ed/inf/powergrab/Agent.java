@@ -9,7 +9,11 @@ public class Agent extends Entity{
     }
 
     public void move(Direction direction){
-        position = position.nextPosition(direction);
+         setPosition(getPosition().nextPosition(direction));
+    }
+
+    public void setPosition(Position position){
+        this.position = position;
     }
 
     @Override
@@ -23,7 +27,7 @@ public class Agent extends Entity{
     @Override
     public void setPower(double power){
         if (power < 0){
-            throw new IllegalArgumentException("Balance cannot be negative!");
+            throw new IllegalArgumentException("Power cannot be negative!");
         }
         this.power = power;
     }

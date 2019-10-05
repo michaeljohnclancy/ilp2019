@@ -2,7 +2,7 @@ package uk.ac.ed.inf.powergrab;
 
 public abstract class Entity {
 
-    private Position position;
+    Position position;
     double balance;
     double power;
 
