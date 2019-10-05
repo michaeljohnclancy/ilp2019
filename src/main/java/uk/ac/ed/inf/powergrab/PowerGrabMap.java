@@ -52,7 +52,7 @@ public class PowerGrabMap {
     public static PowerGrabMap getMap(int day, int month, int year) throws IOException {
         return getMap(
                 new URL(
-                        String.format("http://homepages.inf.ed.ac.uk/stg/powergrab/%01d/%01d/%s/powergrabmap.geojson", year, month, day)
+                        String.format("http://homepages.inf.ed.ac.uk/stg/powergrab/%s/%02d/%02d/powergrabmap.geojson", year, month, day)
                 )
         );
     }
@@ -127,7 +127,7 @@ public class PowerGrabMap {
 
     public static class PowerGrabMapDeserializer extends StdDeserializer<PowerGrabMap>{
 
-        private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E MMM d yyyy");
+        private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E MMM dd yyyy");
 
         public PowerGrabMapDeserializer(){
             this(null);
@@ -138,7 +138,7 @@ public class PowerGrabMap {
         }
 
         /**
-         * This method is uses by the jackson ObjectMapper to deserialize a given json file.
+         * This method is used by the jackson ObjectMapper to deserialize a given json file.
          * It finds the features ArrayNode of the JSON structure, and deserializes each one according to the StationDeserializer.
          *
          * An example of using this:
