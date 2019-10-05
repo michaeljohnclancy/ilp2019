@@ -16,4 +16,12 @@ public class StationListTest {
 
         //StationList list = (StationList) new ArrayList<Station>();
     }
+
+    @Test
+    public void readStationListFromURL() throws IOException {
+
+        StationList stationList = StationList.fromUrl("http://homepages.inf.ed.ac.uk/stg/powergrab/2020/01/01/powergrabmap.geojson");
+
+    }
 }
+

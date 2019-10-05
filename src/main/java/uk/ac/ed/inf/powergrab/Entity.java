@@ -2,7 +2,7 @@ package uk.ac.ed.inf.powergrab;
 
 public abstract class Entity {
 
-    Position position;
+    private Position position;
     double balance;
     double power;
 
@@ -11,7 +11,6 @@ public abstract class Entity {
         balance = builder.balance;
         power = builder.power;
     }
-
 
     public Position getPosition(){
         return position;
@@ -26,6 +25,7 @@ public abstract class Entity {
     }
 
     public abstract void setPower(double power);
+
     public abstract void setBalance(double balance);
 
     public boolean equals(Entity entity) {

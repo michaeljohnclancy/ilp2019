@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 @JsonDeserialize(using = StationList.StationCollectionDeserializer.class)
@@ -19,7 +21,15 @@ public class StationList {
     private List<Station> stationList;
 
     public StationList(List<Station> stationList){
-        this.stationList = stationList;
+        this.stationList = Collections.unmodifiableList(stationList);
+    }
+
+    public static StationList fromUrl(String url) throws IOException {
+        return fromUrl(new URL(url));
+    }
+
+    private static StationList fromUrl(URL url) throws IOException {
+        return new ObjectMapper().readValue(url, StationList.class);
     }
 
     public static StationList fromFile(String filePath) throws IOException {
@@ -58,8 +68,10 @@ public class StationList {
         public StationList deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException{
             JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
             return new StationList(new ObjectMapper().readValue(
-                    jsonNode.get("features").toString(), new TypeReference<List<Station>>() {}
-                    ));
+                    jsonNode.get("features").toString(),
+                    new TypeReference<List<Station>>() {}
+                    )
+            );
         }
     }
 }

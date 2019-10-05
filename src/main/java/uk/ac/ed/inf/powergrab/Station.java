@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.DoubleNode;
 
 import java.io.IOException;
 
@@ -18,18 +17,6 @@ public class Station extends Entity{
         super(builder);
     }
 
-    public void transferBalance(Agent agent){
-        double oldAgentBalance = agent.getBalance();
-        agent.setBalance(max(0.0, agent.getBalance() + balance));
-        balance -= (agent.getBalance() - oldAgentBalance);
-    }
-
-    public void transferPower(Agent agent){
-        double oldAgentPower = agent.getPower();
-        agent.setPower(max(0.0, agent.getPower() + power));
-        power -= (agent.getPower() - oldAgentPower);
-    }
-
     @Override
     public void setPower(double power) {
         this.power = power;
@@ -38,6 +25,18 @@ public class Station extends Entity{
     @Override
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public void transferBalance(Agent agent){
+        double oldAgentBalance = agent.getBalance();
+        agent.setBalance(max(0.0, agent.getBalance() + getBalance()));
+        setBalance(getBalance() - (agent.getBalance() - oldAgentBalance));
+    }
+
+    public void transferPower(Agent agent){
+        double oldAgentPower = agent.getPower();
+        agent.setPower(max(0.0, agent.getPower() + getPower()));
+        setPower(getPower() - (agent.getPower() - oldAgentPower));
     }
 
     public static final class StationBuilder extends Entity.GenericEntityBuilder<StationBuilder>{
