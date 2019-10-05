@@ -34,11 +34,11 @@ public class PowerGrabMap {
         );
     }
 
-    private static PowerGrabMap getMap(URL url) throws IOException {
+    public static PowerGrabMap getMap(URL url) throws IOException {
         return new ObjectMapper().readValue(url, PowerGrabMap.class);
     }
 
-    private static PowerGrabMap getMap(File file) throws IOException {
+    public static PowerGrabMap getMap(File file) throws IOException {
         return new ObjectMapper().readValue(file, PowerGrabMap.class);
     }
 
@@ -76,7 +76,7 @@ public class PowerGrabMap {
 
     public static class PowerGrabMapDeserializer extends StdDeserializer<PowerGrabMap>{
 
-        private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E MMM dd yyyy");
+        private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E MMM d yyyy");
 
         public PowerGrabMapDeserializer(){
             this(null);
@@ -94,7 +94,7 @@ public class PowerGrabMap {
                             jsonNode.get("features").toString(),
                             new TypeReference<List<Station>>() {}
                             ),
-                    LocalDate.parse(jsonNode.get("date-generated").toString(), dateFormatter)
+                    LocalDate.parse(jsonNode.get("date-generated").asText(), dateFormatter)
             );
         }
     }
