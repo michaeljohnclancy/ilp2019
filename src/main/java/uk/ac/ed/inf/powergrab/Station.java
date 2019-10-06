@@ -20,6 +20,8 @@ import static java.lang.Double.max;
 @JsonDeserialize(using = Station.StationDeserializer.class)
 public class Station extends Entity{
 
+    public static final double INTERACTION_RANGE = 0.00025;
+
     private Station(StationBuilder builder) {
         super(builder);
     }

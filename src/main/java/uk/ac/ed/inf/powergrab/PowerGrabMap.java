@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import javafx.util.Pair;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -14,7 +15,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @JsonDeserialize(using = PowerGrabMap.PowerGrabMapDeserializer.class)
 public class PowerGrabMap {
@@ -26,33 +31,18 @@ public class PowerGrabMap {
 
     public static final Rectangle2D.Double playArea = new Rectangle2D.Double(LATMIN, LONGMIN, LATMAX - LATMIN, LONGMAX - LONGMIN);
 
-
     private LocalDate dateGenerated;
     private List<Station> stationList;
-    private Comparator<Position> positionComparator;
 
     /**
-     * Returns a PowerGrabMap given a date.
-     * @param date
+     * Returns a PowerGrabMap given a day, month and year.
      * @return new PowerGrabMap instance.
      * @throws IOException
      */
     public static PowerGrabMap getMap(LocalDate date) throws IOException {
-        return getMap(date.getDayOfMonth(), date.getMonth().getValue(), date.getYear());
-    }
-
-    /**
-     * Returns a PowerGrabMap given a day, month and year.
-     * @param day Day in the month
-     * @param month Month in the year
-     * @param year Year
-     * @return new PowerGrabMap instance.
-     * @throws IOException
-     */
-    public static PowerGrabMap getMap(int day, int month, int year) throws IOException {
         return getMap(
                 new URL(
-                        String.format("http://homepages.inf.ed.ac.uk/stg/powergrab/%s/%02d/%02d/powergrabmap.geojson", year, month, day)
+                        String.format("http://homepages.inf.ed.ac.uk/stg/powergrab/%s/%02d/%02d/powergrabmap.geojson", date.getYear(), date.getMonth().getValue(), date.getDayOfMonth())
                 )
         );
     }
@@ -79,13 +69,7 @@ public class PowerGrabMap {
 
     private PowerGrabMap(List<Station> stationList, LocalDate dateGenerated){
         this.dateGenerated = dateGenerated;
-        this.stationList = Collections.unmodifiableList(stationList);
-
-        positionComparator = new Comparators.EuclideanComparator();
-    }
-
-    private void setPositionComparator(Comparator<Position> comparator){
-        this.positionComparator = comparator;
+        this.stationList = stationList;
     }
 
     public LocalDate getDateGenerated(){
@@ -113,16 +97,56 @@ public class PowerGrabMap {
         return stationList.size();
     }
 
+    public Stream<Station> getStreamOfStationsWithinRangeOf(Entity entity){
+        return getStreamOfPairsSortedByDistanceFrom(entity)
+                .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
+                .map(Pair::getKey);
+    }
+
     /**
-     * This method returns the closes station to a given entity.
-     * It does this by finding the minimum distance using the specified positionComparator (by default, EuclideanComparator).
-     *
-     * @param position Some Position
+     * This method returns the nearest station to a given agent if within the interaction range,
+     * by calling getListSortedByDistanceFrom and getting the first element in that list.
+     * @param agent Agent to calculate distance from
+     * @return Optional returns a station or Optional.empty() if not within range.
+     */
+    public Station getNearestStationIfWithinRange(Agent agent) throws NoSuchElementException {
+        return getStreamOfPairsSortedByDistanceFrom(agent)
+                .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
+                .map(Pair::getKey)
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    /**
+     * This method returns a List of Stations sorted by distance from the given entity.
+     * This converts the return value of getStreamSortedByDistanceFrom into a list.
+     * @param entity Entity to calculate distance from
      * @return
      */
-    public Optional<Station> getNearestStation(Position position){
-        return stationList.stream().
-                min((station, x) -> positionComparator.compare(position, station.getPosition()));
+
+    public List<Station> getListSortedByDistanceFrom(Entity entity){
+        return getStreamOfPairsSortedByDistanceFrom(entity)
+                .map(Pair::getKey)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * This method returns a stream of Stations, sorted by distance from the given entity
+     * @param entity Entity to calculate distance from
+     * @return Station stream
+     */
+    public Stream<Pair<Station, Double>> getStreamOfPairsSortedByDistanceFrom(Entity entity){
+        return stationList.stream()
+                .map(station -> new Pair<>(station, getEuclideanDistance(entity.getPosition(), station.getPosition())))
+                .sorted(Comparator.comparing(Pair::getValue)
+                );
+    }
+
+    public static double getEuclideanDistance(Position p1, Position p2){
+        return Math.sqrt(
+                Math.pow(p2.latitude - p1.latitude, 2)
+                        + Math.pow(p2.longitude - p1.longitude, 2)
+        );
     }
 
     public static class PowerGrabMapDeserializer extends StdDeserializer<PowerGrabMap>{
