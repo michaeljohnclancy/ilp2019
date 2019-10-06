@@ -38,10 +38,10 @@ public abstract class Entity {
 
     public boolean equals(Entity entity) {
         return new EqualsBuilder()
-                .append(position, entity.getPosition())
                 .append(balance, entity.getBalance())
                 .append(power, entity.getPower())
-                .isEquals();
+                .isEquals()
+        && position.equals(entity.getPosition());
     }
 
     public int hashcode(){

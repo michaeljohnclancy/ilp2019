@@ -24,7 +24,6 @@ public class Position {
 
     public boolean inPlayArea() {
         return playArea.contains(latitude, longitude);
-
     }
 
     public boolean equals(Position position){
