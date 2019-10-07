@@ -18,7 +18,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @JsonDeserialize(using = PowerGrabMap.PowerGrabMapDeserializer.class)
@@ -97,37 +96,18 @@ public class PowerGrabMap {
         return stationList.size();
     }
 
-    public Stream<Station> getStreamOfStationsWithinRangeOf(Entity entity){
-        return getStreamOfPairsSortedByDistanceFrom(entity)
-                .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
-                .map(Pair::getKey);
-    }
-
     /**
      * This method returns the nearest station to a given agent if within the interaction range,
      * by calling getListSortedByDistanceFrom and getting the first element in that list.
      * @param agent Agent to calculate distance from
      * @return Optional returns a station or Optional.empty() if not within range.
      */
-    public Station getNearestStationIfWithinRange(Agent agent) throws NoSuchElementException {
-        return getStreamOfPairsSortedByDistanceFrom(agent)
+    public void transferFundsIfNearestStationInRange(Agent agent) throws NoSuchElementException {
+        getStreamOfPairsSortedByDistanceFrom(agent.getPosition())
                 .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
                 .map(Pair::getKey)
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new);
-    }
-
-    /**
-     * This method returns a List of Stations sorted by distance from the given entity.
-     * This converts the return value of getStreamSortedByDistanceFrom into a list.
-     * @param entity Entity to calculate distance from
-     * @return
-     */
-
-    public List<Station> getListSortedByDistanceFrom(Entity entity){
-        return getStreamOfPairsSortedByDistanceFrom(entity)
-                .map(Pair::getKey)
-                .collect(Collectors.toList());
+                .ifPresent(station -> station.transferPowerTo(agent));
     }
 
     /**
@@ -135,9 +115,9 @@ public class PowerGrabMap {
      * @param entity Entity to calculate distance from
      * @return Station stream
      */
-    public Stream<Pair<Station, Double>> getStreamOfPairsSortedByDistanceFrom(Entity entity){
+    public Stream<Pair<Station, Double>> getStreamOfPairsSortedByDistanceFrom(Position position){
         return stationList.stream()
-                .map(station -> new Pair<>(station, getEuclideanDistance(entity.getPosition(), station.getPosition())))
+                .map(station -> new Pair<>(station, getEuclideanDistance(position, station.getPosition())))
                 .sorted(Comparator.comparing(Pair::getValue)
                 );
     }

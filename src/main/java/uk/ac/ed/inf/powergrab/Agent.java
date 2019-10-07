@@ -1,23 +1,29 @@
 package uk.ac.ed.inf.powergrab;
 
-public class Agent extends Entity{
+public abstract class Agent extends Entity{
 
     static final double R = 0.0003;
 
-    Agent(AgentBuilder builder) {
+    Agent(GenericEntityBuilder builder) {
         super(builder);
+    }
+
+    abstract Direction getDirectionEstimate(Environment environment);
+
+    public void updatePositionAccordingTo(Environment environment){
+        move(getDirectionEstimate(environment));
     }
 
     public void move(Direction direction){
          setPosition(getPosition().nextPosition(direction));
     }
 
-    public void setPosition(Position position){
+    private void setPosition(Position position){
         this.position = position;
     }
 
     @Override
-    public void setBalance(double balance) {
+    public void setBalance(double balance){
         if (balance < 0){
             throw new IllegalArgumentException("Balance cannot be negative!");
         }
@@ -30,13 +36,6 @@ public class Agent extends Entity{
             throw new IllegalArgumentException("Power cannot be negative!");
         }
         this.power = power;
-    }
-
-    public static class AgentBuilder extends Entity.GenericEntityBuilder<AgentBuilder>{
-
-        public Agent build(){
-            return new Agent(this);
-        }
     }
 }
 
