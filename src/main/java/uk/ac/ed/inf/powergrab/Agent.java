@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.powergrab;
 
+import java.util.List;
 import java.util.Stack;
 
 public abstract class Agent extends Entity{
@@ -20,6 +21,10 @@ public abstract class Agent extends Entity{
     public void move(Direction direction){
          setPosition(getPosition().nextPosition(direction));
          positionsVisited.push(getPosition());
+    }
+
+    public FlightPath getFlightPath(){
+        return positionsVisited;
     }
 
     @Override

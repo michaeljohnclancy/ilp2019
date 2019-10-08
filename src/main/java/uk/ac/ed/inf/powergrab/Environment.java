@@ -2,15 +2,20 @@ package uk.ac.ed.inf.powergrab;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@JsonSerialize(using = Environment.EnvironmentSerializer.class)
 public class Environment {
 
     public static DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("E MMM dd yyyy");
+    public static ObjectMapper objectMapper;
 
     private final List<Agent> agents;
     private final PowerGrabMap powerGrabMap;
@@ -24,6 +29,17 @@ public class Environment {
         agents.forEach(powerGrabMap::transferFundsIfNearestStationInRange);
     }
 
+    public void writeToJSON(File file) throws IOException {
+        objectMapper.writeValue(file, this);
+    }
+
+    public List<Agent> getAgents(){
+        return agents;
+    }
+
+    public PowerGrabMap getMap(){
+        return powerGrabMap;
+    }
 
     public static final class EnvironmentSerializer extends JsonSerializer<Environment>{
 
@@ -35,6 +51,10 @@ public class Environment {
             for (Station station : environment.powerGrabMap.getStations()) {
                 jsonGenerator.writeObject(station);
             }
+            for (Agent agent : environment.getAgents()){
+                jsonGenerator.writeObject(agent.getFlightPath());
+            }
+            jsonGenerator.writeEndObject();
         }
     }
 
