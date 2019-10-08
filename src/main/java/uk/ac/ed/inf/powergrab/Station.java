@@ -87,6 +87,7 @@ public class Station extends Entity{
         public Station deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IllegalArgumentException, IOException {
             JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
 
+            String identifier = jsonNode.get("id").textValue();
             JsonNode properties = jsonNode.get("properties");
             double coins = Double.parseDouble(properties.get("coins").textValue());
             double power = Double.parseDouble(properties.get("power").textValue());
@@ -96,6 +97,7 @@ public class Station extends Entity{
             double longitude = Double.parseDouble(coordinates.get(0).toString());
 
             return new Station.StationBuilder()
+                        .setIdentifier(identifier)
                         .setBalance(coins)
                         .setPower(power)
                         .setPosition(latitude, longitude)

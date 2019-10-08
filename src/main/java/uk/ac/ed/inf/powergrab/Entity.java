@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public abstract class Entity {
 
+    String identifier;
     Position position;
     double balance;
     double power;
@@ -18,6 +19,10 @@ public abstract class Entity {
         position = builder.position;
         balance = builder.balance;
         power = builder.power;
+    }
+
+    public String getIdentifier(){
+        return identifier;
     }
 
     public Position getPosition(){
@@ -38,6 +43,7 @@ public abstract class Entity {
 
     public boolean equals(Entity entity) {
         return new EqualsBuilder()
+                .append(identifier, entity.getIdentifier())
                 .append(balance, entity.getBalance())
                 .append(power, entity.getPower())
                 .isEquals()
@@ -46,6 +52,7 @@ public abstract class Entity {
 
     public int hashcode(){
         return new HashCodeBuilder()
+                .append(identifier)
                 .append(position)
                 .append(balance)
                 .append(power)
@@ -59,9 +66,15 @@ public abstract class Entity {
      */
     public abstract static class GenericEntityBuilder<T extends GenericEntityBuilder<T>> {
 
+        String identifier;
         Position position;
         double balance;
         double power;
+
+        public T setIdentifier(String identifier){
+            this.identifier = identifier;
+            return self();
+        }
 
         public T setPosition(double latitude, double longitude) throws IllegalArgumentException {
             this.position = new Position(latitude, longitude);
