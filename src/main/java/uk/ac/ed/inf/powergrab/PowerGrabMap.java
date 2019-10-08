@@ -1,10 +1,9 @@
 package uk.ac.ed.inf.powergrab;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import javafx.util.Pair;
@@ -129,9 +128,16 @@ public class PowerGrabMap {
         );
     }
 
-    public static class PowerGrabMapDeserializer extends StdDeserializer<PowerGrabMap>{
+    public static class PowerGrabMapSerializer extends JsonSerializer<PowerGrabMap>{
 
-        private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E MMM dd yyyy");
+        @Override
+        public void serialize(PowerGrabMap powerGrabMap, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+
+
+        }
+    }
+
+    public static class PowerGrabMapDeserializer extends StdDeserializer<PowerGrabMap>{
 
         public PowerGrabMapDeserializer(){
             this(null);
@@ -162,7 +168,7 @@ public class PowerGrabMap {
                             jsonNode.get("features").toString(),
                             new TypeReference<List<Station>>() {}
                             ),
-                    LocalDate.parse(jsonNode.get("date-generated").asText(), dateFormatter)
+                    LocalDate.parse(jsonNode.get("date-generated").asText(), Environment.dateFormatter)
             );
         }
     }

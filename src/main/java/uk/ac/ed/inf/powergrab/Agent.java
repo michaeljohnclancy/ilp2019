@@ -1,8 +1,11 @@
 package uk.ac.ed.inf.powergrab;
 
+import java.util.Stack;
+
 public abstract class Agent extends Entity{
 
     static final double R = 0.0003;
+    private FlightPath positionsVisited;
 
     Agent(GenericEntityBuilder builder) {
         super(builder);
@@ -16,10 +19,16 @@ public abstract class Agent extends Entity{
 
     public void move(Direction direction){
          setPosition(getPosition().nextPosition(direction));
+         positionsVisited.push(getPosition());
+    }
+
+    @Override
+    public Position getPosition(){
+        return positionsVisited.peek();
     }
 
     private void setPosition(Position position){
-        this.position = position;
+        positionsVisited.push(position);
     }
 
     @Override
@@ -37,5 +46,7 @@ public abstract class Agent extends Entity{
         }
         this.power = power;
     }
+
+    public static abstract class AgentBuilder extends GenericEntityBuilder<AgentBuilder>{}
 }
 
