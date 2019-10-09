@@ -166,8 +166,7 @@ public class PowerGrabMap {
             return new PowerGrabMap(
                     new ObjectMapper().readValue(
                             jsonNode.get("features").toString(),
-                            new TypeReference<List<Station>>() {}
-                            ),
+                            new TypeReference<List<Station>>() {}),
                     LocalDate.parse(jsonNode.get("date-generated").asText(), Environment.dateFormatter)
             );
         }

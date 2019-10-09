@@ -1,8 +1,5 @@
 package uk.ac.ed.inf.powergrab;
 
-import java.util.List;
-import java.util.Stack;
-
 public abstract class Agent extends Entity{
 
     static final double R = 0.0003;
@@ -10,11 +7,13 @@ public abstract class Agent extends Entity{
 
     Agent(GenericEntityBuilder builder) {
         super(builder);
+        positionsVisited = new FlightPath();
+        positionsVisited.push(position);
     }
 
     abstract Direction getDirectionEstimate(Environment environment);
 
-    public void updatePositionAccordingTo(Environment environment){
+    public void move(Environment environment){
         move(getDirectionEstimate(environment));
     }
 
@@ -29,7 +28,7 @@ public abstract class Agent extends Entity{
 
     @Override
     public Position getPosition(){
-        return positionsVisited.peek();
+        return positionsVisited.head();
     }
 
     private void setPosition(Position position){

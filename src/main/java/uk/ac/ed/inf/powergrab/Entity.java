@@ -10,12 +10,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public abstract class Entity {
 
-    String identifier;
+    private String identifier;
     Position position;
     double balance;
     double power;
 
     Entity(GenericEntityBuilder builder){
+        identifier = builder.identifier;
         position = builder.position;
         balance = builder.balance;
         power = builder.power;
@@ -25,10 +26,6 @@ public abstract class Entity {
         return identifier;
     }
 
-    public Position getPosition(){
-        return position;
-    }
-
     public double getPower(){
         return power;
     }
@@ -36,6 +33,8 @@ public abstract class Entity {
     public double getBalance(){
         return balance;
     }
+
+    public abstract Position getPosition();
 
     abstract void setPower(double power);
 

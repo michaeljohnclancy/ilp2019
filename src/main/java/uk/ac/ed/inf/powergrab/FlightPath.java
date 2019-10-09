@@ -12,7 +12,11 @@ public class FlightPath {
 
     private Stack<Position> positions;
 
-    public Position peek(){
+    public FlightPath(){
+        positions = new Stack<>();
+    }
+
+    public Position head(){
         return positions.peek();
     }
 

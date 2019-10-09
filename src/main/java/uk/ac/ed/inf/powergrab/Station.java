@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import static java.lang.Double.max;
  * This deserializer is called by the PowerGrabMap deserializer, which returns a new PowerGrabMap object,
  * containing 50 of these Station objects.
  */
+@JsonSerialize(using = Station.StationSerializer.class)
 @JsonDeserialize(using = Station.StationDeserializer.class)
 public class Station extends Entity{
 
@@ -29,6 +31,10 @@ public class Station extends Entity{
         super(builder);
     }
 
+    @Override
+    public Position getPosition(){
+        return position;
+    }
     @Override
     void setPower(double power) {
         this.power = power;
@@ -105,8 +111,8 @@ public class Station extends Entity{
         public Station deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IllegalArgumentException, IOException {
             JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
 
-            String identifier = jsonNode.get("id").textValue();
             JsonNode properties = jsonNode.get("properties");
+            String identifier = properties.get("id").textValue();
             double coins = Double.parseDouble(properties.get("coins").textValue());
             double power = Double.parseDouble(properties.get("power").textValue());
 
