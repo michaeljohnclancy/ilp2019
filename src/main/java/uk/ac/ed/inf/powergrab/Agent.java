@@ -5,8 +5,12 @@ public abstract class Agent extends Entity{
     static final double R = 0.0003;
     private FlightPath positionsVisited;
 
-    Agent(GenericEntityBuilder builder) {
-        super(builder);
+    public Agent(String identifier, Position position) {
+        super(identifier, position);
+
+        setBalance(0.0);
+        setPower(250.0);
+
         positionsVisited = new FlightPath();
         positionsVisited.push(position);
     }
@@ -51,6 +55,5 @@ public abstract class Agent extends Entity{
         this.power = power;
     }
 
-    public static abstract class AgentBuilder extends GenericEntityBuilder<AgentBuilder>{}
 }
 

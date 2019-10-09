@@ -25,16 +25,14 @@ import static java.lang.Double.max;
 @JsonDeserialize(using = Station.StationDeserializer.class)
 public class Station extends Entity{
 
-    public static final double INTERACTION_RANGE = 0.00025;
+    static final double INTERACTION_RANGE = 0.00025;
 
-    private Station(StationBuilder builder) {
-        super(builder);
+    public Station(String identifier, Position position, double balance, double power) {
+        super(identifier, position);
+        this.balance = balance;
+        this.power = power;
     }
 
-    @Override
-    public Position getPosition(){
-        return position;
-    }
     @Override
     void setPower(double power) {
         this.power = power;
@@ -54,7 +52,7 @@ public class Station extends Entity{
      * This method will transfer the appropriate monetary balance from this station to a given agent.
      * @param agent Some agent
      */
-    public void transferBalanceTo(Agent agent){
+    private void transferBalanceTo(Agent agent){
         double oldAgentBalance = agent.getBalance();
         agent.setBalance(max(0.0, agent.getBalance() + getBalance()));
         setBalance(getBalance() - (agent.getBalance() - oldAgentBalance));
@@ -64,18 +62,10 @@ public class Station extends Entity{
      * This method will transfer the appropriate power from this station to a given agent.
      * @param agent Some agent
      */
-    public void transferPowerTo(Agent agent){
+    private void transferPowerTo(Agent agent){
         double oldAgentPower = agent.getPower();
         agent.setPower(max(0.0, agent.getPower() + getPower()));
         setPower(getPower() - (agent.getPower() - oldAgentPower));
-    }
-
-    public static final class StationBuilder extends Entity.GenericEntityBuilder<StationBuilder>{
-
-        @Override
-        public Station build() {
-            return new Station(this);
-        }
     }
 
     public static class StationSerializer extends JsonSerializer<Station>{
@@ -93,9 +83,9 @@ public class Station extends Entity{
         }
     }
 
-    public static class StationDeserializer extends StdDeserializer<Station>{
+    public static class StationDeserializer extends StdDeserializer<Station> {
 
-        public StationDeserializer(){
+        public StationDeserializer() {
             this(null);
         }
 
@@ -125,12 +115,9 @@ public class Station extends Entity{
             double latitude = Double.parseDouble(coordinates.get(1).toString());
             double longitude = Double.parseDouble(coordinates.get(0).toString());
 
-            return new Station.StationBuilder()
-                        .setIdentifier(identifier)
-                        .setBalance(coins)
-                        .setPower(power)
-                        .setPosition(latitude, longitude)
-                        .build();
+            Position position = new Position(latitude, longitude);
+
+            return new Station(identifier, position, coins, power);
         }
     }
 }
