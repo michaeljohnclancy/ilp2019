@@ -13,10 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 @JsonDeserialize(using = PowerGrabMap.PowerGrabMapDeserializer.class)
@@ -101,12 +99,12 @@ public class PowerGrabMap {
      * @param agent Agent to calculate distance from
      * @return Optional returns a station or Optional.empty() if not within range.
      */
-    public void transferFundsIfNearestStationInRange(Agent agent) throws NoSuchElementException {
+    public void transferFundsIfNearestStationInRange(Agent agent){
         getStreamOfPairsSortedByDistanceFrom(agent.getPosition())
                 .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
                 .map(Pair::getKey)
                 .findFirst()
-                .ifPresent(station -> station.transferPowerTo(agent));
+                .ifPresent(station -> station.transferResourcesTo(agent));
     }
 
     /**

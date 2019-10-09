@@ -1,5 +1,6 @@
 package test.uk.ac.ed.inf.powergrab;
 
+import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ed.inf.powergrab.Agent;
@@ -11,18 +12,19 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 public class PowerGrabMapTest {
 
-    private Station expectedStation;
+    private Station station;
     private Agent inBoundsAgent;
     private Agent outOfBoundsAgent;
     private PowerGrabMap powerGrabMap;
 
     @Before
     public void before() throws IOException {
-        expectedStation = new Station.StationBuilder()
+        station = new Station.StationBuilder()
+                .setIdentifier("05e1-42fc-54e6-663b-6336-2659")
                 .setPosition(55.94386776638809, -3.1864088755508475)
                 .setPower(79.57136572604678)
                 .setBalance(31.66170339928509)
@@ -66,11 +68,24 @@ public class PowerGrabMapTest {
         assert powerGrabMap.getNumStations() == 50;
     }
 
-//    @Test
-//    public void ifAgentInRangeOfStation_thenNearestStationIsReturned() {
-//       assert powerGrabMap.getNearestStationIfWithinRange(inBoundsAgent).equals(expectedStation);
-//    }
-//
+    @Test
+    public void ifAgentInRangeOfStation_thenCorrectStationIsSelected(){
+        Stream<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getStreamOfPairsSortedByDistanceFrom(inBoundsAgent.getPosition());
+        assert station.equals(
+                orderedStationsByDistance
+                        .findFirst()
+                        .map(Pair::getKey)
+                        .get()
+        );
+    }
+
+    @Test
+    public void ifAgentInRangeOfStation_thenStationBalanceAndPowerTransferredToAgent() {
+        powerGrabMap.transferFundsIfNearestStationInRange(inBoundsAgent);
+        assert inBoundsAgent.getPower() == 115.07136572604678;
+        assert inBoundsAgent.getBalance() == 46.66170339928509;
+    }
+
 //    @Test(expected = NoSuchElementException.class)
 //    public void ifAgentIsNotInRangeToClosestStation_thenNoSuchElementExceptionIsThrown(){
 //        powerGrabMap.getNearestStationIfWithinRange(outOfBoundsAgent);

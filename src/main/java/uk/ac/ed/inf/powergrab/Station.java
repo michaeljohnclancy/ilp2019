@@ -45,6 +45,11 @@ public class Station extends Entity{
         this.balance = balance;
     }
 
+    public void transferResourcesTo(Agent agent){
+        transferBalanceTo(agent);
+        transferPowerTo(agent);
+    }
+
     /**
      * This method will transfer the appropriate monetary balance from this station to a given agent.
      * @param agent Some agent
