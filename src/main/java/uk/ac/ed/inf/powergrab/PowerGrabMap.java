@@ -15,7 +15,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static uk.ac.ed.inf.powergrab.Environment.objectMapper;
 
 @JsonDeserialize(using = PowerGrabMap.PowerGrabMapDeserializer.class)
 public class PowerGrabMap {
@@ -50,7 +53,7 @@ public class PowerGrabMap {
      * @throws IOException
      */
     public static PowerGrabMap getMap(URL url) throws IOException {
-        return new ObjectMapper().readValue(url, PowerGrabMap.class);
+        return objectMapper.readValue(url, PowerGrabMap.class);
     }
 
     /**
@@ -60,7 +63,7 @@ public class PowerGrabMap {
      * @throws IOException
      */
     public static PowerGrabMap getMap(File file) throws IOException {
-        return new ObjectMapper().readValue(file, PowerGrabMap.class);
+        return objectMapper.readValue(file, PowerGrabMap.class);
     }
 
     private PowerGrabMap(List<Station> stationList, LocalDate dateGenerated){
@@ -94,29 +97,37 @@ public class PowerGrabMap {
     }
 
     /**
-     * This method returns the nearest station to a given agent if within the interaction range,
-     * by calling getListSortedByDistanceFrom and getting the first element in that list.
-     * @param agent Agent to calculate distance from
-     * @return Optional returns a station or Optional.empty() if not within range.
+     * This method transfers the nearest stations resources to a given agent, provided that the station is in the interaction range.
+      * @param agent
      */
     public void transferFundsIfNearestStationInRange(Agent agent){
-        getStreamOfPairsSortedByDistanceFrom(agent.getPosition())
+        getStationDistancePairStream(agent.getPosition())
                 .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
-                .map(Pair::getKey)
-                .findFirst()
-                .ifPresent(station -> station.transferResourcesTo(agent));
+                .min(Comparator.comparing(Pair::getValue))
+                .ifPresent(stationDoublePair -> stationDoublePair.getKey().transferResourcesTo(agent));
     }
 
     /**
-     * This method returns a stream of Stations, sorted by distance from the given entity
-     * @param entity Entity to calculate distance from
-     * @return Station stream
+     * This method returns a stream of Station Distance pairs, where the distance is the Euclidean distance
+     * away from the given position.
+     * @param position Position reference point for the distances.
+     * @return A stream of pairs of stations and their respective distances away from the specified position.
      */
-    public Stream<Pair<Station, Double>> getStreamOfPairsSortedByDistanceFrom(Position position){
+    private Stream<Pair<Station, Double>> getStationDistancePairStream(Position position){
         return stationList.stream()
-                .map(station -> new Pair<>(station, getEuclideanDistance(position, station.getPosition())))
-                .sorted(Comparator.comparing(Pair::getValue)
-                );
+                .map(station -> new Pair<>(station, getEuclideanDistance(position, station.getPosition())));
+    }
+
+    /**
+     * <p>This method returns a sorted list of Station Distance pairs. The list is sorted by distance in ascending order.</p>
+     * <p>See getStationDistancePairStream.</p>
+     * @param position Position reference point for the distances.
+     * @return Sorted list of Station Distance pairs.
+     */
+    public List<Pair<Station, Double>> getStationDistancePairs(Position position){
+        return getStationDistancePairStream(position)
+                .sorted(Comparator.comparing(Pair::getValue))
+                .collect(Collectors.toList());
     }
 
     public static double getEuclideanDistance(Position p1, Position p2){
@@ -162,7 +173,7 @@ public class PowerGrabMap {
         public PowerGrabMap deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException{
             JsonNode jsonNode = jsonParser.getCodec().readTree(jsonParser);
             return new PowerGrabMap(
-                    new ObjectMapper().readValue(
+                    objectMapper.readValue(
                             jsonNode.get("features").toString(),
                             new TypeReference<List<Station>>() {}),
                     LocalDate.parse(jsonNode.get("date-generated").asText(), Environment.dateFormatter)
