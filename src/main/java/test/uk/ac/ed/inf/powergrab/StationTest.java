@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ed.inf.powergrab.Agent;
 import uk.ac.ed.inf.powergrab.Position;
+import uk.ac.ed.inf.powergrab.StatelessAgent;
 import uk.ac.ed.inf.powergrab.Station;
 
 
@@ -17,14 +18,16 @@ public class StationTest {
     private Agent agent;
 
     @Before
-    public void makeObjects() throws Exception {
+    public void makeObjects(){
         station = new Station.StationBuilder()
+                .setIdentifier("237d−16f8−57e5−67fc−2d3e−1ca1")
                 .setBalance(-10.2)
                 .setPower(-20.8)
                 .setPosition(55.94587364601307, -3.190260653365977)
                 .build();
 
-        agent = new Agent.AgentBuilder()
+        agent = new StatelessAgent.StatelessAgentBuilder()
+                .setIdentifier("agent0")
                 .setBalance(35.5)
                 .setPower(15.0)
                 .setPosition(55.944425, -3.188396)
