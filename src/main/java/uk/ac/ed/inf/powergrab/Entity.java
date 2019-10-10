@@ -13,7 +13,7 @@ import java.util.Optional;
 public abstract class Entity {
 
     private String identifier;
-    Position position;
+    private Position position;
     double balance;
     double power;
 

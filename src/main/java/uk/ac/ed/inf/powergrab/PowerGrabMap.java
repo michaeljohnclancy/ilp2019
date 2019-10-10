@@ -1,6 +1,5 @@
 package uk.ac.ed.inf.powergrab;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
@@ -135,15 +134,6 @@ public class PowerGrabMap {
                 Math.pow(p2.latitude - p1.latitude, 2)
                         + Math.pow(p2.longitude - p1.longitude, 2)
         );
-    }
-
-    public static class PowerGrabMapSerializer extends JsonSerializer<PowerGrabMap>{
-
-        @Override
-        public void serialize(PowerGrabMap powerGrabMap, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-
-
-        }
     }
 
     public static class PowerGrabMapDeserializer extends StdDeserializer<PowerGrabMap>{

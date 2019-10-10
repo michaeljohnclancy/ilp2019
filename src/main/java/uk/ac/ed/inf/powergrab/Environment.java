@@ -15,7 +15,7 @@ import java.util.List;
 public class Environment {
 
     public static DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("E MMM dd yyyy");
-    public static ObjectMapper objectMapper;
+    public static ObjectMapper objectMapper = new ObjectMapper();
 
     private final List<Agent> agents;
     private final PowerGrabMap powerGrabMap;
@@ -47,14 +47,18 @@ public class Environment {
         public void serialize(Environment environment, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException{
             jsonGenerator.writeObjectField("type", "FeatureCollection");
             jsonGenerator.writeObjectField("date_generated", environment.powerGrabMap.getDateGenerated().format(dateFormatter));
+
             jsonGenerator.writeArrayFieldStart("features");
-            for (Station station : environment.powerGrabMap.getStations()) {
-                jsonGenerator.writeObject(station);
-            }
+
             for (Agent agent : environment.getAgents()){
                 jsonGenerator.writeObject(agent.getFlightPath());
             }
-            jsonGenerator.writeEndObject();
+
+            for (Station station : environment.powerGrabMap.getStations()) {
+                jsonGenerator.writeObject(station);
+            }
+
+            jsonGenerator.writeEndArray();
         }
     }
 

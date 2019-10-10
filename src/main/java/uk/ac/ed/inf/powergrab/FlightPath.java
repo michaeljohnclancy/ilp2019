@@ -25,6 +25,10 @@ public class FlightPath {
         positions.push(position);
     }
 
+    public boolean equals(FlightPath flightPath){
+        return positions.equals(flightPath.positions);
+    }
+
      public static class FlightPathSerializer extends JsonSerializer<FlightPath>{
 
         @Override

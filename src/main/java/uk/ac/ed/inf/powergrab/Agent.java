@@ -12,7 +12,7 @@ public abstract class Agent extends Entity{
         setPower(250.0);
 
         positionsVisited = new FlightPath();
-        positionsVisited.push(position);
+        setPosition(position);
     }
 
     abstract Direction getDirectionEstimate(Environment environment);
@@ -23,7 +23,6 @@ public abstract class Agent extends Entity{
 
     public void move(Direction direction){
          setPosition(getPosition().nextPosition(direction));
-         positionsVisited.push(getPosition());
     }
 
     public FlightPath getFlightPath(){
