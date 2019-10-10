@@ -43,4 +43,8 @@ public class Position {
     public double[] toArray(){
         return new double[] {latitude, longitude};
     }
+
+    public double[] toReversedArray(){
+        return new double[] {longitude, latitude};
+    }
 }
