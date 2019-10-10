@@ -1,16 +1,14 @@
-package test.uk.ac.ed.inf.powergrab;
+package uk.ac.ed.inf.powergrab;
 
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ed.inf.powergrab.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class PowerGrabMapTest {
 

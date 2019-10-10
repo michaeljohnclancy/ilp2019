@@ -3,8 +3,6 @@ package uk.ac.ed.inf.powergrab;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Optional;
-
 /**
  * This abstract class represents the bare minimum required to be an entity in the game.
  * Currently there are 2 Entity types: Agent and Station.

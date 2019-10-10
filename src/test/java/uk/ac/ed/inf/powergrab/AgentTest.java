@@ -1,8 +1,7 @@
-package test.uk.ac.ed.inf.powergrab;
+package uk.ac.ed.inf.powergrab;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ed.inf.powergrab.*;
 
 public class AgentTest {
 
