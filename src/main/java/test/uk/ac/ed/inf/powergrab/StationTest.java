@@ -81,7 +81,7 @@ public class StationTest {
     }
 
 
-    private void assertDoubleEquals(double d1, double d2){
+    public static void assertDoubleEquals(double d1, double d2){
         assert Math.abs(d2-d1) < DOUBLEPRECISION;
     }
 }
