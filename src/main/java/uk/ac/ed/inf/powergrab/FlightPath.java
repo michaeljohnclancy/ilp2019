@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.IOException;
 import java.util.Stack;
+import java.util.stream.IntStream;
 
 @JsonSerialize(using = FlightPath.FlightPathSerializer.class)
 public class FlightPath {
@@ -26,7 +27,14 @@ public class FlightPath {
     }
 
     public boolean equals(FlightPath flightPath){
-        return positions.equals(flightPath.positions);
+        if (flightPath.positions.size() != positions.size()) return false;
+
+        return IntStream.range(0, positions.size())
+                .allMatch(i -> positions.get(i).equals(flightPath.positions.get(i)));
+    }
+
+    public int hashcode(){
+        return positions.hashCode();
     }
 
      public static class FlightPathSerializer extends JsonSerializer<FlightPath>{

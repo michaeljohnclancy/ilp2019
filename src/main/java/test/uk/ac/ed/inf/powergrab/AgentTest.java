@@ -1,6 +1,5 @@
 package test.uk.ac.ed.inf.powergrab;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ed.inf.powergrab.Direction;
@@ -35,4 +34,6 @@ public class AgentTest {
 
         assert agent0.getFlightPath().equals(expectedFlightPath);
     }
+
+
 }
