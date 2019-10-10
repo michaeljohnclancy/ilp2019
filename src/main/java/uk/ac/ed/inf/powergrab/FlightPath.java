@@ -24,10 +24,6 @@ public class FlightPath {
         positions.push(position);
     }
 
-    public ArrayList<Position> getPositions(){
-        return new ArrayList<>(positions);
-    }
-
     private static class FlightPathSerializer extends JsonSerializer<FlightPath>{
 
         @Override
@@ -37,10 +33,13 @@ public class FlightPath {
             jsonGenerator.writeOmittedField("properties");
             jsonGenerator.writeObjectFieldStart("geometry");
             jsonGenerator.writeObjectField("type", "LineString");
-            jsonGenerator.writeObjectField("coordinates", flightPath.getPositions());
+            jsonGenerator.writeStartArray("coordinates");
+            for (Position position : flightPath.positions) {
+                jsonGenerator.writeArray(position.toArray(), 0, 2);
+            }
+            jsonGenerator.writeEndArray();
             jsonGenerator.writeEndObject();
             jsonGenerator.writeEndObject();
-
         }
     }
 }

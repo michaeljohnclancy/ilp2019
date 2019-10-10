@@ -39,4 +39,8 @@ public class Position {
                 .append(longitude)
                 .toHashCode();
     }
+
+    public double[] toArray(){
+        return new double[] {latitude, longitude};
+    }
 }
