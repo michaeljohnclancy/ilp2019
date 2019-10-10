@@ -3,15 +3,13 @@ package test.uk.ac.ed.inf.powergrab;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ed.inf.powergrab.Agent;
-import uk.ac.ed.inf.powergrab.PowerGrabMap;
-import uk.ac.ed.inf.powergrab.StatelessAgent;
-import uk.ac.ed.inf.powergrab.Station;
+import uk.ac.ed.inf.powergrab.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class PowerGrabMapTest {
@@ -23,24 +21,22 @@ public class PowerGrabMapTest {
 
     @Before
     public void before() throws IOException {
-        station = new Station.StationBuilder()
-                .setIdentifier("05e1-42fc-54e6-663b-6336-2659")
-                .setPosition(55.94386776638809, -3.1864088755508475)
-                .setPower(79.57136572604678)
-                .setBalance(31.66170339928509)
-                .build();
+        station = new Station(
+                "05e1-42fc-54e6-663b-6336-2659",
+                new Position(55.94386776638809, -3.1864088755508475),
+                79.57136572604678,
+                31.66170339928509
+        ) ;
 
-        inBoundsAgent = new StatelessAgent.StatelessAgentBuilder()
-                .setPosition(55.94387776638809, -3.1864088755508475)
-                .setPower(35.5)
-                .setBalance(15.0)
-                .build();
+        inBoundsAgent = new StatelessAgent(
+                "agent0",
+                new Position(55.94387776638809, -3.1864088755508475)
+        );
 
-        outOfBoundsAgent = new StatelessAgent.StatelessAgentBuilder()
-                .setPosition(55.94356776638809, -3.1864088755508475)
-                .setPower(35.5)
-                .setBalance(15.0)
-                .build();
+        outOfBoundsAgent = new StatelessAgent(
+                "agent1",
+                new Position(55.94356776638809, -3.1864088755508475)
+        );
 
         powerGrabMap = PowerGrabMap.getMap(LocalDate.of( 2019,1, 1));
     }
@@ -70,12 +66,10 @@ public class PowerGrabMapTest {
 
     @Test
     public void ifAgentInRangeOfStation_thenCorrectStationIsSelected(){
-        Stream<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getStreamOfPairsSortedByDistanceFrom(inBoundsAgent.getPosition());
+        List<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getStationDistancePairs(inBoundsAgent.getPosition());
         assert station.equals(
                 orderedStationsByDistance
-                        .findFirst()
-                        .map(Pair::getKey)
-                        .get()
+                        .get(0)
         );
     }
 

@@ -12,26 +12,24 @@ import uk.ac.ed.inf.powergrab.Station;
 
 public class StationTest {
 
-    private static final double DOUBLEPRECISION = 10e-15;
+    private static final double DOUBLEPRECISION = 10e-14;
 
     private Station station;
     private Agent agent;
 
     @Before
     public void makeObjects(){
-        station = new Station.StationBuilder()
-                .setIdentifier("237d−16f8−57e5−67fc−2d3e−1ca1")
-                .setBalance(-10.2)
-                .setPower(-20.8)
-                .setPosition(55.94587364601307, -3.190260653365977)
-                .build();
+        station = new Station(
+                "237d−16f8−57e5−67fc−2d3e−1ca1",
+                new Position(55.94587364601307, -3.190260653365977),
+                -10.2,
+                -20.8
+        );
 
-        agent = new StatelessAgent.StatelessAgentBuilder()
-                .setIdentifier("agent0")
-                .setBalance(35.5)
-                .setPower(15.0)
-                .setPosition(55.944425, -3.188396)
-                .build();
+        agent = new StatelessAgent(
+                "agent0",
+                new Position(55.944425, -3.188396)
+        );
     }
 
     @Test
@@ -72,18 +70,16 @@ public class StationTest {
     }
 
     @Test
-    public void ifTransferStationBalanceToAgent_thenAgentAndStationHaveCorrectUpdatedBalances(){
-        station.transferBalanceTo(agent);
-        assertDoubleEquals(station.getBalance(), 0.0);
-        assertDoubleEquals(agent.getBalance(), 25.3);
+    public void ifTransferStationResourcesToAgent_thenAgentAndStationHaveCorrectUpdatedResources(){
+        station.transferResourcesTo(agent);
+
+        assertDoubleEquals(station.getBalance(), -10.2);
+        assertDoubleEquals(agent.getBalance(), 0.0);
+
+        assertDoubleEquals(station.getPower(), 0.0);
+        assertDoubleEquals(agent.getPower(), 229.2);
     }
 
-    @Test
-    public void ifTransferStationPowerToAgent_thenAgentAndStationHaveCorrectUpdatePowers(){
-        station.transferPowerTo(agent);
-        assertDoubleEquals(station.getPower(), -5.8);
-        assertDoubleEquals(agent.getPower(), 0.0);
-    }
 
     private void assertDoubleEquals(double d1, double d2){
         assert Math.abs(d2-d1) < DOUBLEPRECISION;
