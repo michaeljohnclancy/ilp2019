@@ -1,10 +1,8 @@
-package test.uk.ac.ed.inf.powergrab;
+package uk.ac.ed.inf.powergrab;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import uk.ac.ed.inf.powergrab.Direction;
-import uk.ac.ed.inf.powergrab.Position;
 
 /**
  * Unit test for PowerGrab java.uk.ac.ed.inf.powergrab.App.

@@ -2,7 +2,8 @@ package uk.ac.ed.inf.powergrab;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import javafx.util.Pair;
@@ -14,6 +15,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,10 +102,14 @@ public class PowerGrabMap {
       * @param agent
      */
     public void transferFundsIfNearestStationInRange(Agent agent){
-        getStationDistancePairStream(agent.getPosition())
+            getNearestStationDistancePairIfInRange(agent.getPosition())
+                    .ifPresent(stationDoublePair -> stationDoublePair.getKey().transferResourcesTo(agent));
+    }
+
+    public Optional<Pair<Station, Double>> getNearestStationDistancePairIfInRange(Position position){
+        return getStationDistancePairStream(position)
                 .filter(stationDoublePair -> stationDoublePair.getValue() < Station.INTERACTION_RANGE)
-                .min(Comparator.comparing(Pair::getValue))
-                .ifPresent(stationDoublePair -> stationDoublePair.getKey().transferResourcesTo(agent));
+                .min(Comparator.comparing(Pair::getValue));
     }
 
     /**
@@ -123,7 +129,7 @@ public class PowerGrabMap {
      * @param position Position reference point for the distances.
      * @return Sorted list of Station Distance pairs.
      */
-    public List<Pair<Station, Double>> getStationDistancePairs(Position position){
+    public List<Pair<Station, Double>> getSortedStationDistancePairs(Position position){
         return getStationDistancePairStream(position)
                 .sorted(Comparator.comparing(Pair::getValue))
                 .collect(Collectors.toList());

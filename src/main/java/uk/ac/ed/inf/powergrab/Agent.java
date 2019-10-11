@@ -15,11 +15,7 @@ public abstract class Agent extends Entity{
         setPosition(position);
     }
 
-    abstract Direction getDirectionEstimate(Environment environment);
-
-    public void move(Environment environment){
-        move(getDirectionEstimate(environment));
-    }
+    public abstract void moveAndGatherResources(PowerGrabMap powerGrabMap);
 
     public void move(Direction direction){
          setPosition(getPosition().nextPosition(direction));

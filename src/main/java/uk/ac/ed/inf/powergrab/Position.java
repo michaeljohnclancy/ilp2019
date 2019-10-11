@@ -15,6 +15,11 @@ public class Position {
         this.longitude = longitude;
     }
 
+    /**
+     * This method returns a new Position given a direction. It accesses the precalculated sin and cos values of the given direction.
+     * @param direction Direction from the current position to travel in.
+     * @return Updated position after moving in given direction.
+     */
     public Position nextPosition(Direction direction){
         return new Position(
                 latitude - (Agent.R * direction.sinAngle),
@@ -22,6 +27,11 @@ public class Position {
         );
     }
 
+    /**
+     * This method calls 'contains' method of the static Rectangle2D object defined in App. This returns a boolean value
+     * indicating whether or a given latitude and longitude is within the play area.
+     * @return
+     */
     public boolean inPlayArea() {
         return playArea.contains(latitude, longitude);
     }

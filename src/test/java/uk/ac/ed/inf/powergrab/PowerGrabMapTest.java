@@ -1,9 +1,8 @@
-package test.uk.ac.ed.inf.powergrab;
+package uk.ac.ed.inf.powergrab;
 
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ed.inf.powergrab.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,10 +64,9 @@ public class PowerGrabMapTest {
 
     @Test
     public void ifAgentInRangeOfStation_thenCorrectStationIsSelected(){
-        List<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getStationDistancePairs(inBoundsAgent.getPosition());
+        List<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getSortedStationDistancePairs(inBoundsAgent.getPosition());
         assert station.equals(
-                orderedStationsByDistance
-                        .get(0)
+                orderedStationsByDistance.get(0).getKey()
         );
     }
 

@@ -1,12 +1,9 @@
-package test.uk.ac.ed.inf.powergrab;
+package uk.ac.ed.inf.powergrab;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ed.inf.powergrab.Direction;
-import uk.ac.ed.inf.powergrab.FlightPath;
-import uk.ac.ed.inf.powergrab.Position;
 
 import static uk.ac.ed.inf.powergrab.Environment.objectMapper;
 

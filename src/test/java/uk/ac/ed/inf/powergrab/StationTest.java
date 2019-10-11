@@ -1,13 +1,9 @@
-package test.uk.ac.ed.inf.powergrab;
+package uk.ac.ed.inf.powergrab;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ed.inf.powergrab.Agent;
-import uk.ac.ed.inf.powergrab.Position;
-import uk.ac.ed.inf.powergrab.StatelessAgent;
-import uk.ac.ed.inf.powergrab.Station;
 
 
 public class StationTest {
