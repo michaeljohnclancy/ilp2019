@@ -64,10 +64,9 @@ public class PowerGrabMapTest {
 
     @Test
     public void ifAgentInRangeOfStation_thenCorrectStationIsSelected(){
-        List<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getStationDistancePairs(inBoundsAgent.getPosition());
+        List<Pair<Station, Double>> orderedStationsByDistance = powerGrabMap.getSortedStationDistancePairs(inBoundsAgent.getPosition());
         assert station.equals(
-                orderedStationsByDistance
-                        .get(0)
+                orderedStationsByDistance.get(0).getKey()
         );
     }
 

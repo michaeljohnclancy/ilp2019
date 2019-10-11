@@ -9,32 +9,41 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Random;
 
 @JsonSerialize(using = Environment.EnvironmentSerializer.class)
 public class Environment {
 
     public static DateTimeFormatter dateFormatter = java.time.format.DateTimeFormatter.ofPattern("E MMM dd yyyy");
     public static ObjectMapper objectMapper = new ObjectMapper();
+    public static Random randomGenerator = new Random(12345);
 
-    private final List<Agent> agents;
-    private final PowerGrabMap powerGrabMap;
+    private Agent agent;
+    private PowerGrabMap powerGrabMap;
 
-    public Environment(List<Agent> agents, PowerGrabMap powerGrabMap) {
-        this.agents = agents;
+    public Environment(Agent agent, PowerGrabMap powerGrabMap) {
+        this.agent = agent;
         this.powerGrabMap = powerGrabMap;
     }
 
-    public void step(){
-        agents.forEach(powerGrabMap::transferFundsIfNearestStationInRange);
+    public void step(int numSteps){
+        int i = 0;
+        while (i < numSteps && agent.power > 0){
+           step();
+           i++;
+        }
     }
 
-    public void writeToJSON(File file) throws IOException {
+    public void step(){
+        agent.moveAndGatherResources(powerGrabMap);
+    }
+
+    public void toJson(File file) throws IOException {
         objectMapper.writeValue(file, this);
     }
 
-    public List<Agent> getAgents(){
-        return agents;
+    public Agent getAgent() {
+        return agent;
     }
 
     public PowerGrabMap getMap(){
@@ -50,9 +59,7 @@ public class Environment {
 
             jsonGenerator.writeArrayFieldStart("features");
 
-            for (Agent agent : environment.getAgents()){
-                jsonGenerator.writeObject(agent.getFlightPath());
-            }
+            jsonGenerator.writeObject(environment.getAgent().getFlightPath());
 
             for (Station station : environment.powerGrabMap.getStations()) {
                 jsonGenerator.writeObject(station);
@@ -61,5 +68,4 @@ public class Environment {
             jsonGenerator.writeEndArray();
         }
     }
-
 }
