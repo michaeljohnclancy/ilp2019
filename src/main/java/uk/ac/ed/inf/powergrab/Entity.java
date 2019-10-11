@@ -3,8 +3,6 @@ package uk.ac.ed.inf.powergrab;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Optional;
-
 /**
  * This abstract class represents the bare minimum required to be an entity in the game.
  * Currently there are 2 Entity types: Agent and Station.
@@ -14,7 +12,7 @@ public abstract class Entity {
 
     private String identifier;
     private Position position;
-    double balance;
+    double coins;
     double power;
 
     public Entity(String identifier, Position position){
@@ -30,30 +28,26 @@ public abstract class Entity {
 
     }
 
-    abstract void setPower(double power);
-
-    abstract void setBalance(double balance);
-
     public String getIdentifier(){
         return identifier;
-    }
-
-    public double getPower(){
-        return power;
-    }
-
-    public double getBalance(){
-        return balance;
     }
 
     public Position getPosition(){
         return position;
     }
 
+    public double getPower(){
+        return power;
+    }
+
+    public double getCoins(){
+        return coins;
+    }
+
     public boolean equals(Entity entity) {
         return new EqualsBuilder()
                 .append(identifier, entity.getIdentifier())
-                .append(balance, entity.getBalance())
+                .append(coins, entity.getCoins())
                 .append(power, entity.getPower())
                 .isEquals()
         && position.equals(entity.getPosition());
@@ -63,7 +57,7 @@ public abstract class Entity {
         return new HashCodeBuilder()
                 .append(identifier)
                 .append(position)
-                .append(balance)
+                .append(coins)
                 .append(power)
                 .toHashCode();
     }

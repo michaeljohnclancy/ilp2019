@@ -8,8 +8,8 @@ public abstract class Agent extends Entity{
     public Agent(String identifier, Position position) {
         super(identifier, position);
 
-        setBalance(0.0);
-        setPower(250.0);
+        power = 250.0;
+        coins = 0.0;
 
         positionsVisited = new FlightPath();
         setPosition(position);
@@ -38,21 +38,22 @@ public abstract class Agent extends Entity{
         positionsVisited.push(position);
     }
 
-    @Override
-    public void setBalance(double balance){
-        if (balance < 0){
-            throw new IllegalArgumentException("Balance cannot be negative!");
+    public void addCoins(double newCoins){
+        double sum = coins + newCoins;
+        if (sum < 0){
+            throw new IllegalArgumentException("Coin Balance cannot be negative!");
         }
-        this.balance = balance;
+        coins = sum;
     }
 
-    @Override
-    public void setPower(double power){
-        if (power < 0){
+    public void givePower(double newPower){
+        double sum = power + newPower;
+        if (sum < 0){
             throw new IllegalArgumentException("Power cannot be negative!");
         }
-        this.power = power;
+        power = sum;
     }
+
 
 }
 

@@ -29,18 +29,16 @@ public class Station extends Entity{
 
     public Station(String identifier, Position position, double balance, double power) {
         super(identifier, position);
-        this.balance = balance;
+        this.coins = balance;
         this.power = power;
     }
 
-    @Override
     void setPower(double power) {
         this.power = power;
     }
 
-    @Override
     void setBalance(double balance) {
-        this.balance = balance;
+        this.coins = balance;
     }
 
     public void transferResourcesTo(Agent agent){
@@ -49,13 +47,13 @@ public class Station extends Entity{
     }
 
     /**
-     * This method will transfer the appropriate monetary balance from this station to a given agent.
+     * This method will transfer the appropriate monetary coins from this station to a given agent.
      * @param agent Some agent
      */
     private void transferBalanceTo(Agent agent){
-        double oldAgentBalance = agent.getBalance();
-        agent.setBalance(max(0.0, agent.getBalance() + getBalance()));
-        setBalance(getBalance() - (agent.getBalance() - oldAgentBalance));
+        double oldAgentBalance = agent.getCoins();
+        agent.addCoins(max(-agent.getCoins(), getCoins()));
+        setBalance(getCoins() - (agent.getCoins() - oldAgentBalance));
     }
 
     /**
@@ -64,7 +62,7 @@ public class Station extends Entity{
      */
     private void transferPowerTo(Agent agent){
         double oldAgentPower = agent.getPower();
-        agent.setPower(max(0.0, agent.getPower() + getPower()));
+        agent.givePower(max(-agent.getPower(), getPower()));
         setPower(getPower() - (agent.getPower() - oldAgentPower));
     }
 

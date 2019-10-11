@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class PowerGrabMapTest {
 
@@ -77,7 +76,7 @@ public class PowerGrabMapTest {
     public void ifAgentInRangeOfStation_thenStationBalanceAndPowerTransferredToAgent() {
         powerGrabMap.transferFundsIfNearestStationInRange(inBoundsAgent);
         assert inBoundsAgent.getPower() == 115.07136572604678;
-        assert inBoundsAgent.getBalance() == 46.66170339928509;
+        assert inBoundsAgent.getCoins() == 46.66170339928509;
     }
 
 //    @Test(expected = NoSuchElementException.class)

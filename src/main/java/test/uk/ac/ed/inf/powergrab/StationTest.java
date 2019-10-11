@@ -41,7 +41,7 @@ public class StationTest {
 
         assert position.equals(station.getPosition());
         assertDoubleEquals(power, station.getPower());
-        assertDoubleEquals(balance, station.getBalance());
+        assertDoubleEquals(balance, station.getCoins());
     }
 
     @Test
@@ -73,8 +73,8 @@ public class StationTest {
     public void ifTransferStationResourcesToAgent_thenAgentAndStationHaveCorrectUpdatedResources(){
         station.transferResourcesTo(agent);
 
-        assertDoubleEquals(station.getBalance(), -10.2);
-        assertDoubleEquals(agent.getBalance(), 0.0);
+        assertDoubleEquals(station.getCoins(), -10.2);
+        assertDoubleEquals(agent.getCoins(), 0.0);
 
         assertDoubleEquals(station.getPower(), 0.0);
         assertDoubleEquals(agent.getPower(), 229.2);

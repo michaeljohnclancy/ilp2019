@@ -18,13 +18,13 @@ public class AgentTest {
 
     @Test
     public void ifAgentCreated_thenBalanceIs0_andPowerIs250(){
-        StationTest.assertDoubleEquals(agent0.getBalance(), 0.0);
+        StationTest.assertDoubleEquals(agent0.getCoins(), 0.0);
         StationTest.assertDoubleEquals(agent0.getPower(), 250.0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void ifNegativeBalanceIsSet_thenIllegalArgumentExceptionThrown(){
-        agent0.setPower(0);
+        agent0.givePower(0);
     }
 
     @Test
