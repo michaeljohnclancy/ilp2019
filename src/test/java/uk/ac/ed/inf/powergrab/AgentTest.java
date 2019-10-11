@@ -22,8 +22,13 @@ public class AgentTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void ifNegativeBalanceIsSet_thenIllegalArgumentExceptionThrown(){
-        agent0.setPower(0);
+    public void ifNegativeCoinsIsSet_thenIllegalArgumentExceptionThrown(){
+        agent0.setBalance(-5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void ifNegativePowerIsSet_thenIllegalArgumentExceptionThrown(){
+        agent0.setPower(-5);
     }
 
     @Test
